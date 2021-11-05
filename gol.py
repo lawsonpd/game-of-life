@@ -23,6 +23,8 @@ class Grid:
         if init_state:
             self.state.update(init_state)
 
+        # self.__repr__ = self.show_grid()
+
     # Make list of "relative neighbor coordinates"; e.g., (-1, 1), (-1, 0), etc.
     rel_coords = list(itertools.product((-1, 0, 1), (-1, 0, 1)))
     rel_coords.remove((0,0)) # Remove cell "self" relative coordinates
@@ -62,8 +64,9 @@ class Grid:
                 g.update({cell: 1})
         self.state.update(g)
 
-    def fill_cell(self, cell_coords: tuple):
-        pass
+    def show_grid(self):
+        for n in self.num_rows:
+            pass
 
 # def exit_on_q(key):
 #     if key in ('q', 'Q'):
