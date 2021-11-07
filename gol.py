@@ -12,14 +12,12 @@ class Grid:
         self.num_rows = num_rows
         self.num_cols = num_cols
 
-        self.coords = list(itertools.product(range(num_rows), range(num_cols)))
-
-        # `state` will hold the current state of the grid, i.e. a record of
+        # self.state will hold the current state of the grid, i.e. a record of
         # which cells are alive and which are dead.
-        grid_coords = list(itertools.product(range(num_rows), range(num_rows)))
+        grid_coords = list(itertools.product(range(num_rows), range(num_cols)))
         self.state = dict.fromkeys(grid_coords, 0)
 
-        # Update grid with initial state
+        # Update grid with initial state, if provided.
         if init_state:
             self.state.update(init_state)
 
@@ -29,11 +27,13 @@ class Grid:
     rel_coords = list(itertools.product((-1, 0, 1), (-1, 0, 1)))
     rel_coords.remove((0,0)) # Remove cell "self" relative coordinates
 
-    # Get neighbor coordinates using relative coordinates
     def get_neighbor(self, cell_coords, rel_coords):
+        '''
+        Get neighbor coordinates using relative coordinates.
+        '''
         return (cell_coords[0] + rel_coords[0], cell_coords[1] + rel_coords[1])
 
-    def live_neighbors_count(self, cell: tuple, state) -> list:
+    def live_neighbors_count(self, cell: tuple) -> list:
         '''
         @param cell: coordinates of cell in grid
         @param state: self.state
@@ -43,11 +43,11 @@ class Grid:
 
         Returns int `count` equal to number of live neighbors
         '''
-        return sum([state[self.get_neighbor(cell, rel_c)] for rel_c in self.rel_coords \
+        return sum([self.state[self.get_neighbor(cell, rel_c)] for rel_c in self.rel_coords \
                 if cell[0] + rel_c[0] >= 0 and \
-                   cell[0] + rel_c[0] <= self.num_rows - 1 and \
+                   cell[0] + rel_c[0] < self.num_rows and \
                    cell[1] + rel_c[1] >= 0 and \
-                   cell[1] + rel_c[1] <= self.num_cols - 1])
+                   cell[1] + rel_c[1] < self.num_cols])
 
     def apply_rules(self) -> dict:
         '''
@@ -57,7 +57,7 @@ class Grid:
         '''
         g = {}
         for cell, state in self.state.items():
-            num_live_neighbors = self.live_neighbors_count(cell, self.state)
+            num_live_neighbors = self.live_neighbors_count(cell)
             if self.state[cell] == 1 and (num_live_neighbors < 2 or num_live_neighbors > 3):
                 g.update({cell: 0})
             elif num_live_neighbors == 3:
@@ -65,9 +65,25 @@ class Grid:
         self.state.update(g)
 
     def show_grid(self):
+        #TODO
         for n in self.num_rows:
-            pass
+            line = ' '.join([])
+
+    def run_gol(self):
+        #TODO
+        pass
 
 # def exit_on_q(key):
 #     if key in ('q', 'Q'):
 #         raise urwid.ExitMainLoop()
+
+#TODO
+if __name__ == '__main__':
+    size = input('Enter grid size as an integer (e.g. 10 will yield a 10x10 grid.): \n')
+    initial_state = {}
+    initial_state_coords = input('Enter the coordinates of cell you wish to start as "alive": \n')
+    if initial_state_coords:
+        while initial_state_coords:
+            pass
+    else:
+        pass
